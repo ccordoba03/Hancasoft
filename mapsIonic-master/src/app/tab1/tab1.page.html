@@ -12,9 +12,7 @@
         <ion-card-title> Mapa de parque</ion-card-title>
       </ion-card-header>
       <ion-card-header>
-<<<<<<< HEAD
         <ion-card-title> Monica tatiana cuervo </ion-card-title>
-=======
         <ion-card-title> Hjeraldine Ricaurte</ion-card-title>
       </ion-card-header>
       <ion-card-header>
@@ -22,12 +20,12 @@
       </ion-card-header>
       <ion-card-header>
         <ion-card-title> Juan Diaz</ion-card-title>
->>>>>>> 609e119093f7e44b6f66ac684c6fade1bb1ddc5d
       </ion-card-header>
-      <ion-card-content>
+      <ion-card-header>
+        <ion-card-title> Camilo Cordoba</ion-card-title>
+      </ion-card-header>
         <!-- this creates a google map on the page with the given lat/lng from -->
         <!-- the component as the initial center of the map: --> 
-        //cambio  implementacion camilo 
         <agm-map (mapClick)="agregarMarcador($event)" [latitude]="lat" [longitude]="lng" [zoom]='16'>
           <agm-marker *ngFor="let marcador of marcadores" [latitude]="marcador.lat" [longitude]="marcador.lng" iconUrl="assets/location1.png" width="50%">
               <agm-info-window>
