@@ -53,7 +53,20 @@ this.potencia=potencia;
    public String getPotencia() {
         return potencia;
     } 
+  //Declaracion de  metodos - Juan
+   public void Acelerar(){
+       
+       System.out.println("El  carro esta acelerando");   
+      
+   }
  
+  public void Frenar(){
+       
+       System.out.println("El  carro frena");   
+      
+   }
+    
+}
   
   
   
