@@ -16,7 +16,7 @@ public class Taxi {
  private String potencia;
  
  
- // inicialisacion de la clase con constructor-monica
+ // inicializacion de la clase con constructor-monica
  public Taxi(String matricula,int modelo,String potencia){
  
  this.matricula=matricula;
@@ -40,6 +40,21 @@ public void setPotencia(String potencia){
 this.potencia=potencia;
 }
  
+ // se crean metodos get- felipe
+
+
+ public String getMatricula() {
+        return matricula;
+    }
+  public int getModelo() {
+        return modelo;
+    }
+ 
+   public String getPotencia() {
+        return potencia;
+    } 
+  
+  
   
   
  }   
