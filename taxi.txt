@@ -1,0 +1,21 @@
+package taxi;
+
+/**
+ *
+ * @author Monica
+ */
+public class Taxi {
+
+ private String matricula;
+ private int    modelo;
+ private String potencia;
+ 
+ 
+ // inicialisacion de la clase con constructor
+ public Taxi(String matricula,int modelo,String potencia){
+ 
+ this.matricula=matricula;
+ this.modelo=modelo;
+ this.potencia=potencia;
+
+ }   }
