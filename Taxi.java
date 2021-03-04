@@ -40,19 +40,7 @@ public void setPotencia(String potencia){
 this.potencia=potencia;
 }
  
- // se crean metodos get- felipe
 
-
- public String getMatricula() {
-        return matricula;
-    }
-  public int getModelo() {
-        return modelo;
-    }
- 
-   public String getPotencia() {
-        return potencia;
-    } 
   
   
   
