@@ -102,7 +102,7 @@ input, select, textarea {
 	vertical-align: bottom;
 }
 
-#boton {
+.boton {
 	width: 110;
 	height: 30;
     background: #e7642c;
@@ -112,7 +112,7 @@ input, select, textarea {
 	font-weight: bold;
 }
 
-#boton:hover {
+.boton:hover {
     background-color: #FFF;
 	color: #F2A558;
 	font-size: 14;
@@ -229,3 +229,13 @@ ul, ol {
 	height: 320px;	
 }
 
+.ListasDesplegables {
+	width: 400px;
+	height: 30px;
+}
+
+.CasillasTextoFiltro {
+	width: 150px;
+	height: 30px;
+	size: 15;
+}
