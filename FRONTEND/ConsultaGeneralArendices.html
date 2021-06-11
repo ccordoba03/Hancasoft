@@ -15,8 +15,8 @@
                     <tr>
                         <td class="tdtitle"> Aprendiz: </td>
                         <td>
-                            <input name="Aprendiz" id="Aprendiz" type="text" size="15" maxlength="15" value="" style="width: 150; height: 30;" />
-                            <select name="Aprendiz1" id="Aprendiz1" style="width: 300; height: 30;">
+                            <input id="txtAprendiz" name="txtAprendiz" class= "CasillasTextoFiltro" type="text" maxlength="50" value="" />
+                            <select class= "ListasDesplegables" name="Aprendiz1" id="Aprendiz1">
                                 <option value="">--Seleccione--</option>
                             </select> 
                         </td>
@@ -24,8 +24,7 @@
                     <tr>
                         <td class="tdtitle"> Programa:</td>
                         <td>
-                            <input name="Programa" id="Programa" type="text" size="15" maxlength="15" value="" style="width: 150; height: 30;" />
-                            <select name="Programa1" id="Programa1" style="width: 300; height: 30;">
+                            <select class= "ListasDesplegables" name="Programa1" id="Programa1">
                                 <option value="">--Todos--</option>
                             </select> 
                         </td>
@@ -33,7 +32,7 @@
                     <tr>
                         <td class="tdtitle"> Ficha:</td>
                         <td> 
-                            <input name="Ficha" id="Ficha" type="text" size="15" maxlength="15" style="width: 150; height: 30;">
+                            <input id="txtFicha" name="txtFicha"  type="text" maxlength="50" class= "CasillasTextoFiltro">
                         </td>
                     </tr>
 
@@ -41,8 +40,10 @@
                 <table class="tableboton">
                     <tr>
                         <td class="tdboton">
-                            <a href= "marco.html"> <input type="button" value="Regresar" id="boton" style="cursor: pointer"/></a>
-                            <input type="button" value="Consultar" id="boton" style="cursor: pointer"/>
+                            <a href= "marco.html"> 
+                                <input type="button" value="Regresar" id="btnRegresar" class= "boton" style="cursor: pointer"/>
+                            </a>
+                            <input type="button" value="Consultar" id="btnConsultar" class= "boton" style="cursor: pointer"/>
                             <img class="imgboton" name="Imprimir" id="Imprimir" width="23" height="23" title="Imprimir" style="cursor: pointer;" src="imagenes/Imprimir.png"/>
                             <img name="Excel" id="Excel" width="23" height="23" title="Exportar a Excel" style="cursor: pointer;" src="imagenes/Excel.png"/>
                         </td>
