@@ -1,89 +1,78 @@
+<?php
+//Conexion con el servidor y la base de datos
+include 'ConexionDB.php';
+header('Content-Type: text/html; charset=iso-8859-1');
+?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Adjuntar Documentos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descargar Actas</title>
     <link rel="stylesheet" href="css/estilos.css" type="text/css">
 </head>
 
 <body class="bodymarco">
-    <div>
-        <h1 class="titulonivel1">Adjuntar Documentos<img src="imagenes/logoSena4.png" width="70" height="70" align="right"></h1>
 
-            <section class="bodypagina">
-                <div class="sectopc">
-                <form>
-                <table >
-                    <tr>
-                        <td class="tdtitle"> Aprendiz: </td>
-                        <td>
-                            <input id="txtAprendiz" name="txtAprendiz" class= "CasillasTextoFiltro" type="text" maxlength="50" value="" />
-                            <select class= "ListasDesplegables" name="Aprendiz1" id="Aprendiz1">
-                                <option value="">--Seleccione--</option>
-                            </select> 
-                        </td>
-                    </tr><br>
-                </table> 
+<div>
+    <h1 class="titulonivel1">Adjuntar Documentos<img src="imagenes/logoSena4.png" width="70" height="70" align="right"></h1>
+    <section class="bodypagina">
+    <div class="sectopc">
+        <table >
+            <tr>
+                <form action="AdjuntarDocumentos.php" method="POST" enctype="multipart/form-data">
+                <input type="file" name="files"/>                  
+                <input type="submit" name="enviar" class="boton" tyle="cursor: pointer"/>
+                </form>
+            </tr><br>
+        </table> 
 
-                <table class="tableboton">
-                    <tr>
-                        <td class="tdboton">
-                            <a href= "marco.html"> 
-                                <input type="button" name= 'btnRegresar' value="Regresar" id="btnRegresar" class= "boton" style="cursor: pointer"/>
-                            </a>
-                            <input type="submit" value="Consultar" class="boton" style="cursor: pointer"/>
-                        </td>
-                    </tr>
-                </table>
+        <table class="tableboton">
+            <tr>
+                <td class="tdboton">
+                    <a href= "marco.html"> 
+                        <input type="button" name= 'btnRegresar' value="Regresar" id="btnRegresar" class= "boton" style="cursor: pointer"/>
+                    </a>
+                </td>
+            </tr>
+            <?php
+            if(isset($_POST['enviar'])){
+                echo '<p>Nombre del documento: '.$_FILES['files']['name'].'</p>';
 
-                <br><br> 
-                <table>
-                    <tr class="trcolumnas">
-                        <td>Id Reporte</td>
-                        <td>Tipo Novedad</td>
-                        <td>Tipo Falta</td>
-                        <td>Llamado Atención</td>
-                        <td>Reporte de Novedad</td>
-                        <td>Fecha Reporte</td>
-                        <td>Documentos</td>
-                        <td>Adjuntar Documentos</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Académico</td>
-                        <td>Baja</td>
-                        <td>Verbal</td>
-                        <td>Incumplimiento Actividades</td>
-                        <td>30/01/2021</td>
-                        <td>Ver</td>
-                        <td>
-                            <input name="" id="Adjdocumentos" type="file"/>
-                        </td>
-                    </tr>
-                </table>
+                $tipo = explode(".",$_FILES['files']['name']);
+                $dir = 'Documentos/';
+                if (isset($_FILES['files']['tmp_name'])) {
 
-                <table class="tableboton">
-                    <tr>
-                        <td class="tdboton">
-                            <input type="button" value="Guardar" class="boton" style="cursor: pointer"/>
-                        </td>
-                    </tr>
-                </table>
-            
+                    if ($tipo[1] == 'docx'){
+                        if (!copy($_FILES['files']['tmp_name'], $dir.$_FILES['files']['name']))
+                        echo "<script>alert('Error al Subir el Archivo');</script>";
+                        else echo "<script>alert('Se ha subido correctamente el Archivo');</script>";
+                    } // window.location.replace('recibe.php')
+                    
+                    else {
+                        echo "<script>alert('El Archivo que se intenta subir NO es de tipo Word.');</script>";
+                    }
+                }  
+            }   
+            ?>
+        </table>
+    </div>  
+    </section>
+
+    <footer class="footermarco"> 
+        <div class="contpie">
+            <p>Angie.Ricaurte / Instructor</p>
+            <div>
+                <p>Copyrigth&copy 2020 | <span class="span1">HAN</span><span class="span2">CAS</span><span class="span3">OFT</span></p>
             </div>
-               
-                
-            </section>
+            <p> <span class="span5"> <a href="login.php">Cerrar Sesi&oacute;n </a></span></p>
+        </div>
+    </footer>
+</div>
 
-            <footer class="footermarco"> 
-                <div class="contpie">
-                    <p>Angie.Ricaurte / Instructor</p>
-                    <div>
-                        <p>Copyrigth&copy 2020 | <span class="span1">HAN</span><span class="span2">CAS</span><span class="span3">OFT</span></p>
-                    </div>
-                    <p> <span class="span5"> <a href="login.html">Cerrar Sesión </a></span></p>
-                </div>
-            </footer>
-        </form>
-    </div>
+
 </body>
+
 </html>
+
+
