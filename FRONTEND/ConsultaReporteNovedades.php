@@ -1,156 +1,229 @@
+<?php
+//Conexion con el servidor y la base de datos
+include 'ConexionDB.php';
+header('Content-Type: text/html; charset=iso-8859-1');
+?>
+
+<?php
+//abrir SQL Server Authentication
+$conn = sqlsrv_connect( $serverName, $connectionInfo); 
+
+//Cadena de SQL
+$tsql_ListaProgramas = "EXECUTE dbo.ListaProgramas";   
+                    
+$procedimiento_ListaProgramas = sqlsrv_prepare ($conn, $tsql_ListaProgramas);
+
+// Ejecuto cadena query()
+$resultado_ListaProgramas = sqlsrv_execute ($procedimiento_ListaProgramas);
+
+if(!$resultado_ListaProgramas){
+    echo "<script>alert('ERROR: no se pudo ejecutar la consulta!');</script>";
+}else {
+
+}
+echo sqlsrv_errors();
+
+//consulta filtros
+
+$ListaAprendices = null;
+$ListaProgramas = null;
+$ListaFicha = null;
+
+//  isset() del boton consultar
+if(isset($_POST['btnConsultar']))
+{
+    $ListaAprendices = $_POST ['txtAprendiz'];
+    $ListaProgramas = $_POST ['txtPrograma'];
+    $ListaFicha = $_POST ['txtFicha'];
+
+    if ($ListaAprendices == '') {
+    $ListaAprendices = NULL;
+    }
+
+    if ($ListaProgramas == '') {
+    $ListaProgramas = NULL;
+    }
+
+    if ($ListaFicha == '') {
+    $ListaFicha = NULL;
+    }
+
+    
+}
+?>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/estilos.css" type="text/css">
+    <meta charset="iso-8859-1">
     <title>Consulta Reporte de Novedades</title>
+    <link rel="stylesheet" href="css/estilos.css" type="text/css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $( function() {
+        $("#txtAprendiz").autocomplete({
+            source: "API/ListarAprendices.php",
+            });
+        } );
+  </script>
 </head>
 
-    <h1 class="titulonivel1">Consulta Reporte de Novedades<img src="imagenes/logoSena4.png" width="70" height="70" align="right"></h1>
+<body class="bodymarco">
+    <div>
+        <h1 class="titulonivel1">Consulta Reporte de Novedades<img src="imagenes/logoSena4.png" width="70" height="70" align="right"></h1>
 
-<section class="bodypagina">
+            <section class="bodypagina">
+            <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>"> 
+                <div class="sectopc">
+                <table >
+                    <tr>
+                        <td class="tdtitle"> Aprendiz: </td>
+                        <td>
+                            <input id="txtAprendiz" name="txtAprendiz" class= "CasillasTextoFiltro" type="text" maxlength="50" value= '<?php echo $ListaAprendices ?>'>
+                        </td>
+                    </tr>
 
-    <body class="bodymarco">    
-           
-        <main class="sectopc">
-                        
-            <div>
-                           
-                <form action="">
+                    <tr>
+                        <td class="tdtitle"> Ficha:</td>
+                        <td> 
+                            <input id="txtFicha" name="txtFicha"  type="text" maxlength="50" class= "CasillasTextoFiltro" value= '<?php echo $ListaFicha ?>' >
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="tdtitle"> Programa:</td>
+                        <td>
+                            <select class= "ListasDesplegables" name="txtPrograma" id="txtPrograma">
+                                <option value="">--Todos--</option>
+                                <?php
+                                // consulta a la base de datos, sql nos retorna el conjunto de datos que responde a la consulta
+                                $ProgramaSeleccionado = null;
 
+                                while ($mostrar = sqlsrv_fetch_array ($procedimiento_ListaProgramas))
+                                    { 
+                                        if ($ListaProgramas == $mostrar ['IdPrograma']) {
+                                            $ProgramaSeleccionado = "selected= 'selected'";
+                                        }
+                                        else { $ProgramaSeleccionado ='';
+                                        }
+                                ?>   
+                                <option value='<?php echo $mostrar ['IdPrograma']?>'<?php echo $ProgramaSeleccionado?> > 
+                                    <?php echo  $mostrar ['DescripcionPrograma'] ?> - <?php echo $mostrar ['Programa'] ?>
+                                </option>
+                                <?php
+                                    } // cerrar cilo while
+                                ?>
+                            </select> 
+                        </td>
+                    </tr>
 
-                <div style="float:left">   
-                     
-                    <table>
-                             
-                        <tr>
-                            <td class="tdtitle">Fecha Inicial:</td>
-                            <td>
-                                <input type="date">
-                            </td> 
-                        </tr>
-                        <tr>
-                            <td class="tdtitle">Aprendiz:</td>
-                            <td>
-                                <input id="txtAprendiz" name="txtAprendiz" class= "CasillasTextoFiltro" type="text" maxlength="50" value="" />
-                                <select class= "ListasDesplegables" name="Aprendiz1" id="Aprendiz1">
-                                    <option value="">--Seleccione--</option>
-                                </select> 
-                            </td> 
-                        </tr>
-                        <tr>
-                            <td class="tdtitle"> Ficha:</td>
-                            <td> 
-                                <input id="txtFicha" name="txtFicha"  type="text" maxlength="50" class= "CasillasTextoFiltro">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="tdtitle"> Tipo de Falta:</td>
-                            <td>
-                                <select class= "ListasDesplegables" name="TipoFalta" id="TipoFalta">
-                                    <option value="">--Todos--</option>
-                                </select> 
-                            </td>
-                        </tr>
-                        <br>
-                    </table>
-                <br>
-            </div>
+                </table> 
+                <table class="tableboton">
+                    <tr>
+                        <td class="tdboton">
+                            <a href= "marco.html"> 
+                                <input type="button" name= 'btnRegresar' value="Regresar" id="btnRegresar" class= "boton" style="cursor: pointer"/>
+                            </a>
+                            <input type="submit" name= 'btnConsultar' value="Consultar" id="btnConsultar" class= "boton" style="cursor: pointer"/>
+                            <img onclick="ImprimirPagina();" class="imgboton" name="Imprimir" id="Imprimir" width="23" height="23" title="Imprimir" style="cursor: pointer;" src="imagenes/Imprimir.png"/>
+                            <script>
+                                function ImprimirPagina () {
+                                    window.print();
+                                }
+                            </script>
+                            <img name="Excel" id="Excel" width="23" height="23" title="Exportar a Excel" style="cursor: pointer;" src="imagenes/Excel.png"/>
+                        </td>
+                    </tr>
+                </table>
+                <br><br> 
 
-            <br>
-            <div>
-            <table border>
-                <tr>
-                    <td class="tdtitle">Fecha Inicial:</td>
-                    <td>
-                        <input type="date">
-                    </td> 
-                </tr>
-                <tr>
-                    <td class="tdtitle"> Programa:</td>
-                    <td>
-                        <select class= "ListasDesplegables" name="Programa1" id="Programa1">
-                             <option value="">--Todos--</option>
-                        </select> 
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdtitle"> Tipo de Novedad:</td>
-                    <td>
-                        <select class= "ListasDesplegables" name="TipoNovedad" id="TipoNovedad">
-                            <option value="">--Todos--</option>
-                        </select> 
-                    </td>
-                </tr>           
-                <tr>
-                    <td class="tdtitle"> Tipo de Llamado:</td>
-                    <td>
-                        <select class= "ListasDesplegables" name="TipoLlamado" id="TipoLlamado">
-                            <option value="">--Todos--</option>
-                        </select> 
-                    </td>
-                </tr>           
-                                
-            </table>
-            </div>
+                <?php
+                //  isset() del boton consultar
+                if(isset($_POST['btnConsultar']))
+                {
+                
+                    //abrir SQL Server Authentication
+                    $conn = sqlsrv_connect( $serverName, $connectionInfo);  
 
-            <br>
+                    //Parametros del procedimiento dbo.InformeReporteNovedades
+                    $procedure_params = array(
+                        array($ListaAprendices, SQLSRV_PARAM_IN),
+                        array($ListaProgramas, SQLSRV_PARAM_IN),
+                        array($ListaFicha, SQLSRV_PARAM_IN)
+                        );
+
+                    //Cadena de SQL
+                    $tsql = "EXECUTE dbo.InformeReporteNovedades @ListaAprendices=?,@ListaProgramas=?,@ListaFicha=?";   
+                    
+                    $procedimiento = sqlsrv_prepare ($conn, $tsql, $procedure_params);
+                
+
+                    // Ejecuto cadena query()
+                    $resultado = sqlsrv_execute ($procedimiento);
+
+                    if(!$resultado){
+                        echo "<script>alert('ERROR: no se pudo ejecutar la consulta!');</script>";
+                    }else {
+
+                    }
+                    
+                    echo sqlsrv_errors();
+                ?>
+
+                <table>
+                    <tr class="trcolumnas">
+                        <td>Tipo Doc.</td>
+                        <td>No. Documento</td>
+                        <td>Nombres</td>
+                        <td>Apellidos</td>
+                        <td>Programa</td>
+                        <td>Ficha</td>
+                        <td>Trimestre</td>
+                        <td>Sede</td>
+                        <td>No. Reporte</td>
+                        <td>Novedad</td>
+                        <td>Falta</td>
+                        <td>Llamado Atenci&oacute;n</td>
+                        <td>Descripci&oacute;n</td>
+                        <td>Fecha</td>
+                    </tr>
+
+                    <?php
+                    // consulta a la base de datos, sql nos retorna el conjunto de datos que responde a la consulta
+                    //https://www.youtube.com/watch?v=nPAp-gT5gPI
+                    while ($mostrar = sqlsrv_fetch_array ($procedimiento))
+                        { 
+                    ?>   
+
+                    <tr>
+                        <td> <?php echo $mostrar ['TipoIdentificacion'] ?> </td>
+                        <td> <?php echo $mostrar ['NoIdentificacion'] ?> </td>
+                        <td> <?php echo $mostrar ['Nombre'] ?> </td>
+                        <td> <?php echo $mostrar ['Apellidos'] ?> </td>
+                        <td> <?php echo $mostrar ['Programa'] ?> </td>
+                        <td> <?php echo $mostrar ['Ficha'] ?> </td>
+                        <td> <?php echo $mostrar ['Trimestre'] ?> </td>
+                        <td> <?php echo $mostrar ['Sede'] ?> </td>
+                        <td> <?php echo $mostrar ['IdReporte'] ?> </td>
+                        <td> <?php echo $mostrar ['Novedad'] ?> </td>
+                        <td> <?php echo $mostrar ['Falta'] ?> </td>
+                        <td> <?php echo $mostrar ['LlamadoAtencion'] ?> </td>
+                        <td> <?php echo $mostrar ['DescripcionReporte'] ?> </td>
+                        <td> <?php echo $mostrar ['FechaRegistroReporte'] ?> </td>
+                    </tr>
+
+                <?php
+                        }//cerrar ciclo while
+                }
+                ?>
+                </table>
             
-            <table class="tableboton">
-                <tr>
-                    <td class="tdboton">
-                        <a href= "marco.html"> <input type="button" value="Regresar" class="boton" style="cursor: pointer"/></a>
-                        <input type="button" value="Consultar" class="boton" style="cursor: pointer"/>
-                        <img class="imgboton" name="Imprimir" class="Imprimir" width="23" height="23" title="Imprimir" style="cursor: pointer;" src="imagenes/Imprimir.png"/>
-                        <img name="Excel" class="Excel" width="23" height="23" title="Exportar a Excel" style="cursor: pointer;" src="imagenes/Excel.png"/>
-                    </td>
-                </tr>
-            </table>
-                    </form>
-            <table>
-                <tr class="trcolumnas">
-                    <th>Tipo Doc.</th>
-                    <th>No. Documento</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Programa</th>
-                    <th>Ficha</th>
-                    <th>Trimestre</th>
-                    <th>Sede</th>
-                    <th>Id Reporte</th>
-                    <th>Novedad</th>
-                    <th>Falta</th>
-                    <th>Llamado Atención</th>
-                    <th>Reporte Novedad</th>
-                    <th>Fecha</th>
-                    <th>Observaciones</th>
-                    <th>Documentos</th>
-                    <th>Observación</th>
-                </tr>
-                <tr>
-                    <td>CC</td>
-                    <td>1023909387</td>
-                    <td>Angie Hjeraldine</td>
-                    <td>Ricaurte Porras</td>
-                    <td>ADSI</td>
-                    <td>1234567</td>
-                    <td>IV</td>
-                    <td>CEET</td>
-                    <td>1964701</td>
-                    <td>Incumplimiento Actividades</td>
-                    <td>BAJA</td>
-                    <td>Académico</td>
-                    <td>Verbal</td>
-                    <td>22/01/201</td>
-                    <td> <a href="">VER</a></td>
-                    <td><a href="">VER</a></td>
-                    <td> <a href="">VER</a></td>
-                </tr>
-            </table>  
-
-        </main>
-
-        </section>    
+            </div>
+            </form>   
+                
+            </section>
 
             <footer class="footermarco"> 
                 <div class="contpie">
@@ -158,9 +231,9 @@
                     <div>
                         <p>Copyrigth&copy 2020 | <span class="span1">HAN</span><span class="span2">CAS</span><span class="span3">OFT</span></p>
                     </div>
-                    <p> <span class="span5"> <a href="login.html">Cerrar Sesión </a></span></p>
+                    <p> <span class="span5"> <a href="login.php">Cerrar Sesi&oacute;n </a></span></p>
                 </div>
             </footer>
-            
-    </body>
+    </div>
+</body>
 </html>
